@@ -34,7 +34,7 @@ System::Void Crossesandzerosgame::StartForm::buttonStartGame_Click(System::Objec
     form->rows = (int)numericUpDownFieldSize->Value;
     form->columns = (int)numericUpDownFieldSize->Value;
     form->length = (int)numericUpDownCombLength->Value;
-    if(form->rows == 4) form->ClientSize = System::Drawing::Size(250, 300);
+    if(form->rows == 4) form->ClientSize = System::Drawing::Size(250, 320);
     this->Hide();
     form->Show();
     //form->NewGame();

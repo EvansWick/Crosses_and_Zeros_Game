@@ -58,6 +58,7 @@ GameMap::~GameMap()
 
 bool GameMap::setPosition(Vector2 cell, int c)
 {
+    if (cell.x < 0 || cell.x >= Size.x || cell.y < 0 || cell.y >= Size.y) return false;
     if (isEmpty(cell)) {
         map[cell.x][cell.y] = c;
         return true;
@@ -122,141 +123,80 @@ int GameMap::getValue(int _i, int _j)
     return map[_i][_j];
 }
 
+//Checked
 int GameMap::CheckList(std::vector<int> a)
 {
-    if (a.size() < length) return 0;
-    bool WinP1 = false;
-    bool WinP2 = false;
+    int current = 0;
+    int count = 1;
 
-    int count1 = 0;
-    int count2 = 0;
-
-    // Checking score
-    for (int i = 0; i < a.size(); i++) {
-        for (int j = i; j < i + length; j++) {
-            if (j < a.size()) {
-                if (a[j] == 1) count1++;
-            }
-            else break;
+    for (int i = 1; i < a.size(); i++) {
+        if (a[i] != 0 && a[i] == a[i - 1]) {
+            count++;
+            if (count >= length)
+                return a[i]; // 1 - player1 win, 2 - player2 win
         }
-        if (count1 >= length) {
-            WinP1 = true;
-            break;
+        else {
+            count = 1;
         }
-        count1 = 0;
-    }
-    for (int i = 0; i < a.size(); i++) { // checking second player
-        for (int j = i; j < i + length; j++) {
-            if (j < a.size()) {
-                if (a[j] == 2) count2++;
-            }
-            else break;
-        }
-        if (count2 >= length) {
-            WinP1 = true;
-            break;
-        }
-        count2 = 0;
     }
 
-    if (WinP1 && WinP2) return 3; // draw
-    else if (!WinP1 && WinP2) return 2; // second won
-    else if (WinP1 && !WinP2) return 1; // first won
-    else return 0;
+    return 0; // nobody
 }
 
+
+//Checked
 int GameMap::CheckingWin()
 {
-    int StateWin = 0;
-    std::vector<int> check;
+    int rows = Size.x;
+    int cols = Size.y;
 
-    for (int i = 0; i < Size.x; i++) { // gorizontal
-        for (int j = 0; j < Size.y; j++) {
-            check.push_back(map[i][j]);
+    // Горизонталі
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j <= cols - length; ++j) {
+            std::vector<int> line;
+            for (int k = 0; k < length; ++k)
+                line.push_back(map[i][j + k]);
+            int res = CheckList(line);
+            if (res == 1 || res == 2) return res;
         }
-        StateWin = CheckList(check);
-        check.clear();
-
-        //Checking
-        if (StateWin == 3) return 3; // draw
-        else if (StateWin == 2) return 2; // win second
-        else if (StateWin == 1) return 1; // win first
-
     }
 
-    for (int i = 0; i < Size.x; i++) { // vertical
-        for (int j = 0; j < Size.y; j++) {
-            check.push_back(map[j][i]);
+    // Вертикалі
+    for (int i = 0; i <= rows - length; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            std::vector<int> line;
+            for (int k = 0; k < length; ++k)
+                line.push_back(map[i + k][j]);
+            int res = CheckList(line);
+            if (res == 1 || res == 2) return res;
         }
-        StateWin = CheckList(check);
-        check.clear();
-
-        //Checking
-        if (StateWin == 3) return 3; // draw
-        else if (StateWin == 2) return 2; // win second
-        else if (StateWin == 1) return 1; // win first
-
     }
 
-    for (int i = 0; i < Size.x; ++i) { // main diagonal and up her
-        for (int j = 0; i + j < Size.y; ++j) {
-            check.push_back(map[i+j][i]);
+    // Діагоналі \ (зліва направо вниз)
+    for (int i = 0; i <= rows - length; ++i) {
+        for (int j = 0; j <= cols - length; ++j) {
+            std::vector<int> line;
+            for (int k = 0; k < length; ++k)
+                line.push_back(map[i + k][j + k]);
+            int res = CheckList(line);
+            if (res == 1 || res == 2) return res;
         }
-        StateWin = CheckList(check);
-        check.clear();
-
-        //Checking
-        if (StateWin == 3) return 3; // draw
-        else if (StateWin == 2) return 2; // win second
-        else if (StateWin == 1) return 1; // win first
-
-    }
-    for (int i = 1; i < Size.x; ++i) { // main diagonal and under her
-        for (int j = 0; i + j < Size.y; ++j) {
-            check.push_back(map[i + j][i]);
-        }
-        StateWin = CheckList(check);
-        check.clear();
-
-        //Checking
-        if (StateWin == 3) return 3; // draw
-        else if (StateWin == 2) return 2; // win second
-        else if (StateWin == 1) return 1; // win first
-
     }
 
-    //all rights diagonales
-    for (int j = Size.y; j > 0; --j) { // 
-        for (int i = 0; i < Size.x; ++i) {
-            if (Size.x - i - j >= 0) check.push_back(map[i][Size.x - i - j]);
+    // Діагоналі / (справа наліво вниз)
+    for (int i = 0; i <= rows - length; ++i) {
+        for (int j = length - 1; j < cols; ++j) {
+            std::vector<int> line;
+            for (int k = 0; k < length; ++k)
+                line.push_back(map[i + k][j - k]);
+            int res = CheckList(line);
+            if (res == 1 || res == 2) return res;
         }
-        StateWin = CheckList(check);
-        check.clear();
-
-        //Checking
-        if (StateWin == 3) return 3; // draw
-        else if (StateWin == 2) return 2; // win second
-        else if (StateWin == 1) return 1; // win first
-
     }
 
-    for (int j = 0; j < Size.y; ++j) { // under poboch diagonal
-        for (int i = 0; i < Size.x; ++i) {
-            if (Size.x + j - i < Size.x) check.push_back(map[i][Size.x + j - i]);
-        }
-        StateWin = CheckList(check);
-        check.clear();
-
-        //Checking
-        if (StateWin == 3) return 3; // draw
-        else if (StateWin == 2) return 2; // win second
-        else if (StateWin == 1) return 1; // win first
-
-    }
-
-    if (CanMove()) return 0; // win nobody
-    else return 3; //draw
+    return CanMove() ? 0 : 3;
 }
+
 
 bool GameMap::CanMove()
 {

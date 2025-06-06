@@ -124,7 +124,7 @@ namespace Crossesandzerosgame {
 			this->listBoxGameMode->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"PvP", L"PvE" });
 			this->listBoxGameMode->Location = System::Drawing::Point(603, 41);
 			this->listBoxGameMode->Name = L"listBoxGameMode";
-			this->listBoxGameMode->Size = System::Drawing::Size(112, 31);
+			this->listBoxGameMode->Size = System::Drawing::Size(112, 58);
 			this->listBoxGameMode->TabIndex = 3;
 			// 
 			// numericUpDownFieldSize
@@ -227,5 +227,6 @@ namespace Crossesandzerosgame {
 private: System::Void aboutToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 private: System::Void buttonStartGame_Click(System::Object^ sender, System::EventArgs^ e);
+
 };
 }

@@ -9,8 +9,8 @@ enum GameMode {
 
 //Game information
 GameMap map;
-Gamer Player1;
-Gamer Player2;
+Gamer player1;
+Gamer player2;
 GamerStatus CurrentPlayer;
 Vector2 SelectedCellPlayer;
 
@@ -66,7 +66,7 @@ System::Void Crossesandzerosgame::GameForm::aboutToolStripMenuItem_Click(System:
 
 System::Void Crossesandzerosgame::GameForm::exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
-    if (sound) soundClick->Play();
+    //if (sound) soundClick->Play();
     if (MessageBox::Show("Continue?", "Exit", MessageBoxButtons::YesNo) == Windows::Forms::DialogResult::Yes) {
         Application::Exit();
     }
@@ -85,11 +85,14 @@ System::Void Crossesandzerosgame::GameForm::dataGridView1_CellContentClick(Syste
     SetPositionPlayer(SelectedCellPlayer);
 }
 
-void Crossesandzerosgame::GameForm::GameLogic()
+void Crossesandzerosgame::GameForm::GameLogic() //////////////////////////////////////////////
 {
     if (gameMode == PVE) {
-        if (CurrentPlayer == Computer) StepAI();
+        if (CurrentPlayer == Computer) StepAI();//////////////////////////////////////////////
         UpDate();
+    }
+    else {
+        
     }
 }
 
@@ -144,13 +147,13 @@ void Crossesandzerosgame::GameForm::UpDate()
         }
     }
     else {
-        if (CurrentPlayer == PLayer1) {
+        if (CurrentPlayer == GamerStatus::Player1) {
             toolStripStatusLabel1->Text = "Player 1's move";
-            CurrentPlayer = GamerStatus::PLayer2;
+            CurrentPlayer = GamerStatus::Player2;
         }
         else {
             toolStripStatusLabel1->Text = "Player 2's move";
-            CurrentPlayer = GamerStatus::PLayer1;
+            CurrentPlayer = GamerStatus::Player1;
         }
     }
 
@@ -161,7 +164,10 @@ void Crossesandzerosgame::GameForm::UpDate()
 void Crossesandzerosgame::GameForm::NewGame()
 {
     // data inicialization
+
+
     map.setMap(rows, columns, length);
+    
     rand = gcnew Random();
     endGame = false;
     CreateGameGrid(map.getSize());
@@ -189,36 +195,36 @@ void Crossesandzerosgame::GameForm::NewGame()
         int state_gamer = rand->Next(1, 3);
         if (state_gamer == 1) {
             if (gameMode == PVE) {
-                Player1.SetField(Player, 1);
-                Player2.SetField(Computer, 2);
+                player1.SetField(Player, 1);
+                player2.SetField(Computer, 2);
 
                 toolStripStatusLabel1->Text = "Player's move";
                 CurrentPlayer = Player;
             }
             else {
-                Player1.SetField(GamerStatus::PLayer1, 1);
-                Player2.SetField(GamerStatus::PLayer2, 2);
+                player1.SetField(GamerStatus::Player1, 1);
+                player2.SetField(GamerStatus::Player2, 2);
 
                 toolStripStatusLabel1->Text = "Player 1's move";
-                CurrentPlayer = PLayer1;
+                CurrentPlayer = GamerStatus::Player1;
             }
         }
         else if (state_gamer == 2) {
             if (gameMode == PVE) {
-                Player1.SetField(Player, 1);
-                Player2.SetField(Computer, 2);
+                player1.SetField(Player, 1);
+                player2.SetField(Computer, 2);
 
                 toolStripStatusLabel1->Text = "Computer's move";
                 CurrentPlayer = Computer;
-                GameLogic();
-                UpdateGamerGrid();
+                //GameLogic();
+                //UpdateGamerGrid();
             }
             else {
-                Player1.SetField(GamerStatus::PLayer1, 1);
-                Player2.SetField(GamerStatus::PLayer2, 2);
+                player1.SetField(GamerStatus::Player1, 1);
+                player2.SetField(GamerStatus::Player2, 2);
 
                 toolStripStatusLabel1->Text = "Player 1's move";
-                CurrentPlayer = PLayer1;
+                CurrentPlayer = GamerStatus::Player1;
             }
         }
         else {
@@ -226,6 +232,12 @@ void Crossesandzerosgame::GameForm::NewGame()
             return;
         }
     }
+    // п≥сл€ циклу num_mixing
+    if (gameMode == PVE && CurrentPlayer == Computer) {
+        GameLogic();
+        UpdateGamerGrid();
+    }
+
 
 
 
@@ -237,7 +249,7 @@ void Crossesandzerosgame::GameForm::StepAI()
     if (currentMoves < allMoves.size()) {
         //Is emptry this cell
         if (map.isEmpty(allMoves[currentMoves])) {
-            map.setPosition(allMoves[currentMoves], Player2.getMark());
+            map.setPosition(allMoves[currentMoves], player2.getMark());
             currentMoves++;
         }
         else {
@@ -253,7 +265,9 @@ void Crossesandzerosgame::GameForm::UpdateGamerGrid()
         for (int j = 0; j < map.getSize().y; j++) {
             if (!map.isEmpty(i, j)) {
                 if (map.getValue(i, j) == 1) dataGridView1->Rows[i]->Cells[j]->Value = "X";
-            } else dataGridView1->Rows[i]->Cells[j]->Value = "X";
+                if (map.getValue(i, j) == 2) dataGridView1->Rows[i]->Cells[j]->Value = "0";
+            } 
+            //else dataGridView1->Rows[i]->Cells[j]->Value = "X";
         }
     }
 }
@@ -286,13 +300,14 @@ void Crossesandzerosgame::GameForm::CreateGameGrid(Vector2 _size)
         dataGridView1->Rows[i]->HeaderCell->Value = Convert::ToSingle(i + 1);
         dataGridView1->Rows[i]->Height = 50;
     }
+    //MessageBox::Show("grid is created", "Map");
 }
 
 System::Void Crossesandzerosgame::GameForm::SetPositionPlayer(Vector2 cell)
 {
     if (gameMode == PVE) {
         if (CurrentPlayer == Player) {
-            if (!map.setPosition(cell, Player1.getMark())) {
+            if (!map.setPosition(cell, player1.getMark())) {
                 MessageBox::Show("This cell already busy", "Stop Game");
                 return;
             }
@@ -302,9 +317,15 @@ System::Void Crossesandzerosgame::GameForm::SetPositionPlayer(Vector2 cell)
             return;
         }
     }
-    else {
-        if (CurrentPlayer == PLayer1) {
-            if (!map.setPosition(cell, Player1.getMark())) {
+    else { // режим PVP
+        if (CurrentPlayer == GamerStatus::Player1) {
+            if (!map.setPosition(cell, player1.getMark())) {
+                MessageBox::Show("This cell already busy", "Stop Game");
+                return;
+            }
+        }
+        else if (CurrentPlayer == GamerStatus::Player2) {
+            if (!map.setPosition(cell, player2.getMark())) {
                 MessageBox::Show("This cell already busy", "Stop Game");
                 return;
             }
@@ -314,5 +335,7 @@ System::Void Crossesandzerosgame::GameForm::SetPositionPlayer(Vector2 cell)
             return;
         }
     }
-    UpDate();
+
+    UpDate(); // оновленн€ гри та зм≥на гравц€
 }
+
