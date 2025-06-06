@@ -45,7 +45,7 @@ namespace Crossesandzerosgame {
 	private: System::Windows::Forms::ToolStripMenuItem^ menuToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ newGameToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ backToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ powerOnoffSoundsToolStripMenuItem;
+
 	private: System::Windows::Forms::ToolStripMenuItem^ aboutToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ exitToolStripMenuItem;
 	private: System::Windows::Forms::DataGridView^ dataGridView1;
@@ -69,7 +69,6 @@ namespace Crossesandzerosgame {
 			this->menuToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->newGameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->backToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->powerOnoffSoundsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
@@ -107,9 +106,9 @@ namespace Crossesandzerosgame {
 			// 
 			// menuToolStripMenuItem
 			// 
-			this->menuToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->menuToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
 				this->newGameToolStripMenuItem,
-					this->backToolStripMenuItem, this->powerOnoffSoundsToolStripMenuItem
+					this->backToolStripMenuItem
 			});
 			this->menuToolStripMenuItem->Name = L"menuToolStripMenuItem";
 			this->menuToolStripMenuItem->Size = System::Drawing::Size(50, 20);
@@ -118,23 +117,16 @@ namespace Crossesandzerosgame {
 			// newGameToolStripMenuItem
 			// 
 			this->newGameToolStripMenuItem->Name = L"newGameToolStripMenuItem";
-			this->newGameToolStripMenuItem->Size = System::Drawing::Size(185, 22);
+			this->newGameToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->newGameToolStripMenuItem->Text = L"New game";
 			this->newGameToolStripMenuItem->Click += gcnew System::EventHandler(this, &GameForm::newGameToolStripMenuItem_Click);
 			// 
 			// backToolStripMenuItem
 			// 
 			this->backToolStripMenuItem->Name = L"backToolStripMenuItem";
-			this->backToolStripMenuItem->Size = System::Drawing::Size(185, 22);
+			this->backToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->backToolStripMenuItem->Text = L"Back";
 			this->backToolStripMenuItem->Click += gcnew System::EventHandler(this, &GameForm::backToolStripMenuItem_Click);
-			// 
-			// powerOnoffSoundsToolStripMenuItem
-			// 
-			this->powerOnoffSoundsToolStripMenuItem->Name = L"powerOnoffSoundsToolStripMenuItem";
-			this->powerOnoffSoundsToolStripMenuItem->Size = System::Drawing::Size(185, 22);
-			this->powerOnoffSoundsToolStripMenuItem->Text = L"Power on\\off sounds";
-			this->powerOnoffSoundsToolStripMenuItem->Click += gcnew System::EventHandler(this, &GameForm::powerOnoffSoundsToolStripMenuItem_Click);
 			// 
 			// aboutToolStripMenuItem
 			// 
@@ -161,7 +153,6 @@ namespace Crossesandzerosgame {
 			this->dataGridView1->Size = System::Drawing::Size(505, 305);
 			this->dataGridView1->TabIndex = 2;
 			this->dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &GameForm::dataGridView1_CellContentClick);
-			//this->dataGridView1->Click += gcnew System::EventHandler(this, &GameForm::dataGridView1_Click);
 			// 
 			// GameForm
 			// 
@@ -174,6 +165,7 @@ namespace Crossesandzerosgame {
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"GameForm";
 			this->Text = L"Game";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &GameForm::GameForm_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &GameForm::GameForm_Load);
 			this->statusStrip1->ResumeLayout(false);
 			this->statusStrip1->PerformLayout();
@@ -192,8 +184,8 @@ namespace Crossesandzerosgame {
 	public: int length;
 	public: int SelectedGameMode;
 	private: Random^ rand;
-	private: System::Media::SoundPlayer^ soundClick;
-	private: System::Media::SoundPlayer^ soundEndGame;
+	public: System::Media::SoundPlayer^ soundClick;
+	public: System::Media::SoundPlayer^ soundEndGame;
 
 	private: void GameLogic();
 	private: void UpDate();
@@ -208,6 +200,8 @@ private: System::Void powerOnoffSoundsToolStripMenuItem_Click(System::Object^ se
 private: System::Void aboutToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 private: System::Void dataGridView1_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e);
+
+private: System::Void GameForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e);
 
 };
 }

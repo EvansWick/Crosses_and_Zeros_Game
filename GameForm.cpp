@@ -17,12 +17,11 @@ Vector2 SelectedCellPlayer;
 //flags
 bool CanPlay;
 bool endGame;
-bool sound;
+
 
 //For AI
 std::vector<Vector2> allMoves;
 int currentMoves;
-
 
 System::Void Crossesandzerosgame::GameForm::GameForm_Load(System::Object^ sender, System::EventArgs^ e)
 {
@@ -30,10 +29,6 @@ System::Void Crossesandzerosgame::GameForm::GameForm_Load(System::Object^ sender
     if (SelectedGameMode == 0) gameMode = PVP;
     else gameMode = PVE;
 
-    //Sound inicialization
-    soundClick = gcnew System::Media::SoundPlayer("..\\Resoures\\1.waw");
-    soundEndGame = gcnew System::Media::SoundPlayer("..\\Resourses\\2.waw");
-    sound = true;
 
     NewGame();
 }
@@ -56,12 +51,12 @@ System::Void Crossesandzerosgame::GameForm::backToolStripMenuItem_Click(System::
 
 System::Void Crossesandzerosgame::GameForm::powerOnoffSoundsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
-    sound = !sound;
+
 }
 
 System::Void Crossesandzerosgame::GameForm::aboutToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
-    return System::Void();
+    MessageBox::Show("It's a simple game when you need build line by cross or zero", "Game rules");
 }
 
 System::Void Crossesandzerosgame::GameForm::exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
@@ -74,7 +69,6 @@ System::Void Crossesandzerosgame::GameForm::exitToolStripMenuItem_Click(System::
 
 System::Void Crossesandzerosgame::GameForm::dataGridView1_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e)
 {
-    //if (sound) soundClick->Play();
 
     auto SenderGrid = (DataGridView^)sender; // Convert to table
 
@@ -102,29 +96,28 @@ void Crossesandzerosgame::GameForm::UpDate()
     if (endGame) return;
 
     if (StateGame == 1) {
+        UpdateGamerGrid();
         if (gameMode == PVP) MessageBox::Show("Player 1 won!", "Win");
         else MessageBox::Show("Player won!", "Win");
 
-        UpdateGamerGrid();
+        
         endGame = true;
     }
     if (StateGame == 2) {
+        UpdateGamerGrid();
         if (gameMode == PVP) MessageBox::Show("Player 2 won!", "Win");
         else MessageBox::Show("Computer won!", "Lose");
 
-        UpdateGamerGrid();
+        
         endGame = true;
     }
     if (StateGame == 3) {
-        MessageBox::Show("Won nobody", "Draw");
-
         UpdateGamerGrid();
+        MessageBox::Show("Won nobody", "Draw");
         endGame = true;
-
     }
 
     if (endGame) {
-        //if (sound) soundEndGame->Play();
         if (MessageBox::Show("Do you want play again?", "New Game", MessageBoxButtons::YesNo) == Windows::Forms::DialogResult::Yes) {
             NewGame();
         }
@@ -148,11 +141,11 @@ void Crossesandzerosgame::GameForm::UpDate()
     }
     else {
         if (CurrentPlayer == GamerStatus::Player1) {
-            toolStripStatusLabel1->Text = "Player 1's move";
+            toolStripStatusLabel1->Text = "Player 2's move";
             CurrentPlayer = GamerStatus::Player2;
         }
         else {
-            toolStripStatusLabel1->Text = "Player 2's move";
+            toolStripStatusLabel1->Text = "Player 1's move";
             CurrentPlayer = GamerStatus::Player1;
         }
     }
@@ -337,5 +330,10 @@ System::Void Crossesandzerosgame::GameForm::SetPositionPlayer(Vector2 cell)
     }
 
     UpDate(); // оновленн€ гри та зм≥на гравц€
+}
+
+System::Void Crossesandzerosgame::GameForm::GameForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e)
+{
+    Application::Exit();
 }
 

@@ -210,6 +210,7 @@ namespace Crossesandzerosgame {
 			this->Name = L"StartForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"New Game";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &StartForm::StartForm_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &StartForm::StartForm_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDownFieldSize))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDownCombLength))->EndInit();
@@ -227,6 +228,9 @@ namespace Crossesandzerosgame {
 private: System::Void aboutToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 private: System::Void buttonStartGame_Click(System::Object^ sender, System::EventArgs^ e);
+
+private: System::Void StartForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e);
+	
 
 };
 }

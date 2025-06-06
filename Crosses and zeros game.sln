@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Crosses and zeros game", "Crosses and zeros game.vcxproj", "{EF07D81E-6FD8-4543-ABD9-A59A5739328E}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "XOSetup", "..\XOSetup\XOSetup.vdproj", "{A334D261-77C8-4496-9F92-FFF82AAB1A06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{EF07D81E-6FD8-4543-ABD9-A59A5739328E}.Release|x64.Build.0 = Release|x64
 		{EF07D81E-6FD8-4543-ABD9-A59A5739328E}.Release|x86.ActiveCfg = Release|Win32
 		{EF07D81E-6FD8-4543-ABD9-A59A5739328E}.Release|x86.Build.0 = Release|Win32
+		{A334D261-77C8-4496-9F92-FFF82AAB1A06}.Debug|x64.ActiveCfg = Debug
+		{A334D261-77C8-4496-9F92-FFF82AAB1A06}.Debug|x86.ActiveCfg = Debug
+		{A334D261-77C8-4496-9F92-FFF82AAB1A06}.Release|x64.ActiveCfg = Release
+		{A334D261-77C8-4496-9F92-FFF82AAB1A06}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
